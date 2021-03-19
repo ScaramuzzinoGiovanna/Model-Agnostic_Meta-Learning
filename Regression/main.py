@@ -12,8 +12,7 @@ from utility import *
 
 
 def eval(model, x_test, y_test, x_tab, y_tab, lr, num_steps):
-    # addestro su un nuovo dataset il modello gia addestrato
-    optimizer = optimizers.Adam(learning_rate=lr)
+    optimizer = optimizers.SGD(learning_rate=lr)
     loss_mse = losses.MeanSquaredError()
     predictions = []
     losses_ = []
@@ -27,6 +26,7 @@ def eval(model, x_test, y_test, x_tab, y_tab, lr, num_steps):
             loss = loss_mse(y_tab, pred)
             predictions.append((step, pred))
             losses_.append(loss.numpy())
+            print(str(step) + '--loss: ' + str(loss.numpy()))
         else:
             with tf.GradientTape() as tape:
                 # train
@@ -39,6 +39,8 @@ def eval(model, x_test, y_test, x_tab, y_tab, lr, num_steps):
             losses_.append(loss.numpy())
             if step in num_steps:
                 predictions.append((step, pred))
+            print(str(step) + '--loss: ' + str(loss.numpy()))
+
     return predictions, losses_
 
 
@@ -48,15 +50,19 @@ if __name__ == '__main__':
     lr_pretrained = 0.002
     # K = 5
     # lr_pretrained = 0.01
+
     lr_maml = 0.01
 
-    trains_examples = 20000
+    trains_examples = 11000
     test_examples = 2
     # test_x_points = [0.0, 3.0, 3.5, 3.9, 5.0]
-    test_x_points = [0.0, 1.0, 1.9, 2.5, 2.7, 3.0, 3.5, 3.9, 4.3, 5.0]
+    test_x_points = [0.0, 1.0, 1.9, 2.5, 2.7, 3.0, 3.5, 3.9, 4.3, 5.0]  # for half points
     epochs = 1
     n_steps = [0, 1, 10]
     folder_plots = 'plots/tasks' + str(trains_examples)
+
+    if not os.path.isdir('models'):
+        os.makedir('models')
 
     if not os.path.isdir(folder_plots):
         print('create folder ')
@@ -85,7 +91,7 @@ if __name__ == '__main__':
         model_maml = k.models.load_model('models/MAML_K{}_tasks{}'.format(K, trains_examples))
     else:
         print('train MAML model')
-        model_maml, losses_maml = maml.train(lr=lr_maml, epochs=epochs, model=model_maml, dataset=dataset_train)
+        model_maml, losses_maml = maml.train(lr=lr_maml, model=model_maml, dataset=dataset_train)
         plot_avgLosses(losses_maml, folder_plots, 'MAML', K)
         model_maml.save('models/MAML_K{}_tasks{}'.format(K, trains_examples))
         k.backend.clear_session()
