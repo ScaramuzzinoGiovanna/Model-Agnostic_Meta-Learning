@@ -25,6 +25,7 @@ def train(lr, model, dataset):
             gradients_inner = inner_tape.gradient(inner_loss, trainable_vars)
             # copy model
             copied_model = tf.keras.models.clone_model(model)
+            copied_model.set_weights(model.get_weights())
             # gradient descendent
             k = 0
             for j in range(1, len(copied_model.layers)):
