@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 
 def plot_regression(array, x_tab, y_tab, x_test, y_test, K, i, name, folder_plot):
-    # plot
+    # plot regression
     ground_truth = plt.plot(x_tab, y_tab, '')[0]
     K_points = plt.plot(x_test, y_test, '^')[0]
     plots = [K_points, ground_truth]
@@ -29,6 +29,7 @@ def plot_learning_curve(mse_maml, mse_pretrained, K, i, folder_plot):
     maml = plt.plot(range(len(mse_maml)), mse_maml)[0]
     pre = plt.plot(range(len(mse_pretrained)), mse_pretrained)[0]
     plt.legend([maml, pre], ['MAML', 'Pretrained'])
+    # plt.ylim([0, 4.5])
     plt.title('k-shot regression K={}'.format(K))
     plt.xlabel('number of gradient steps')
     plt.ylabel('mean squared error')
