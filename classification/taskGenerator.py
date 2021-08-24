@@ -12,9 +12,9 @@ class TaskGenerator:
         '''
         :param dataset_name: dataset name
         :param n_way: a train task contains images from different N classes
-        :param shot_num: k images used for meta-train
-        :param query_num: k images used for meta-test
-        :param meta_batch_size: the number of tasks in a batch
+        :param shot_num: number of  images used for meta-train
+        :param query_num: number of images used for meta-test
+        :param meta_batch_size: number of tasks in a batch
         '''
         self.dataset = dataset_name
         self.meta_batch_size = meta_batch_size
@@ -64,7 +64,7 @@ class TaskGenerator:
         self.label_map = []
 
     def get_batch(self, type):
-        # return batch set for type
+        # return batch set for type: train, val or test
         if type == 'train':
             folders = self.metatrain_folders
         elif type == 'val':
@@ -132,6 +132,7 @@ class TaskGenerator:
 
             support_x.extend([self.extract_images(img_file) for img_file in tmp_support_x])
             query_x.extend([self.extract_images(img_file) for img_file in tmp_query_x])
+            # applied one hot to labels
             support_y.extend([tf.one_hot(label, self.n_way) for _ in range(len(tmp_support_x))])
             query_y.extend([tf.one_hot(label, self.n_way) for _ in range(len(tmp_query_x))])
 
