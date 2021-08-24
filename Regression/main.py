@@ -13,7 +13,7 @@ from utility import *
 
 
 def eval(model_, x_test, y_test, x_tab, y_tab, lr, num_steps):
-    # evaluate performance by finetuning the model learned
+    # evaluate performance by finetuning the model learned using new tasks
     model = tf.keras.models.clone_model(model_)
     model.set_weights(model_.get_weights())
 

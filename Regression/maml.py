@@ -3,6 +3,7 @@ from keras import optimizers, losses
 
 
 def train(lr, model, dataset):
+    # MAML algorithm
     losses_ = []
     optimizer = optimizers.Adam(learning_rate=lr)
     loss_mse = losses.MeanSquaredError()
