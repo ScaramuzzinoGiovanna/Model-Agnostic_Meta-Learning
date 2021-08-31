@@ -248,7 +248,7 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument("-d", "--dataset", default='omniglot', choices=['omniglot', 'miniimagenet'])
     ap.add_argument("-t", "--type", default='test', choices=['train', 'test'])
-    ap.add_argument("-n_way", "--n_way", default='20')  # class used for classification
+    ap.add_argument("-n_way", "--n_way", default='5')  # class used for classification
     ap.add_argument("-shot_num", "--shot_num", default='5')  # example per class of support set
     ap.add_argument("-query_num", "--query_num", default='5')  # query images
     ap.add_argument("-update_steps_train", default="1")
@@ -264,17 +264,9 @@ if __name__ == '__main__':
     # -d omniglot -t train -n_way 5 -shot_num 5 -query_num 5 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
     # -d omniglot -t test -n_way 5 -shot_num 5 -query_num 5 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
 
-    #                       --------------caso 20way 5shot omniglot-----------------------
-    # -d omniglot -t train -n_way 20 -shot_num 5 -query_num 5 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-    # -d omniglot -t test -n_way 20 -shot_num 5 -query_num 5 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-
     #                       ---------------caso 5way 1shot omniglot-------------------
     # -d omniglot -t train -n_way 5 -shot_num 1 -query_num 1 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
     # -d omniglot -t test -n_way 5 -shot_num 1 -query_num 1 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
-
-    #                       --------------caso 20way 1shot omniglot-----------------------
-    # -d omniglot -t train -n_way 20 -shot_num 1 -query_num 1 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-    # -d omniglot -t test -n_way 20 -shot_num 1 -query_num 1 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
 
     #                       -----------------caso 5way 1shot miniimagenet-------------------
     # -d miniimagenet -t train -n_way 5 -shot_num 1 -query_num 15 -update_steps_train 5 -update_steps_test 10 -lr 0.01 -meta_batch_size 4 -model_name MiniimagenetConvModel
@@ -336,5 +328,5 @@ if __name__ == '__main__':
         n_interations_test = 600
         print('test maml model with: ' + str(n_way) + 'way-' + str(shot_num) + 'shot')
 
-        maml.model = tf.keras.models.load_model(folder_name + '/best_model_acc')
+        maml.model = tf.keras.models.load_model(folder_name + '/best_model_loss')
         maml.test(lr_inner, update_steps_test, batch_generator, n_interations_test)

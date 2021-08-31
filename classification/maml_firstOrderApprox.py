@@ -20,6 +20,7 @@ tf.config.set_visible_devices(physical_devices[0], 'GPU')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
 np.warnings.filterwarnings('ignore', category=np.VisibleDeprecationWarning)
 
+
 def get_accuracy(y, y_pred):
     accuracy = k.metrics.Accuracy()
     accuracy.update_state(tf.argmax(y_pred, axis=1), tf.argmax(y, axis=1))
@@ -35,14 +36,14 @@ class MAML:
         self.best_loss = 999999
         self.best_acc = -999999
 
-    def train(self, update_steps_train, gen_batch, lr_inner, lr_outer, n_interations, log_dir , write_log=True):
+    def train(self, update_steps_train, gen_batch, lr_inner, lr_outer, n_interations, log_dir, write_log=True):
         if write_log == True:
             summary_writer = tf.summary.create_file_writer(logdir=log_dir)
         optimizer = optimizers.Adam(learning_rate=lr_outer)
         losses_ = []
         accuracies_ = []
         for iteration in range(n_interations):
-            self.iteration_train = iteration #for keyboard interruction
+            self.iteration_train = iteration  # for keyboard interruction
             batch = gen_batch.get_batch('train')
             tot_batch_loss = 0
             tot_batch_accuracy = 0
@@ -81,7 +82,7 @@ class MAML:
             # first order approximation
             optimizer.apply_gradients(zip(means_gradient, self.model.trainable_variables))
 
-            if write_log ==True:
+            if write_log == True:
                 with summary_writer.as_default():
                     tf.summary.scalar('epoch_loss_avg', avg_loss.numpy(), step=iteration)
                     tf.summary.scalar('epoch_accuracy', avg_acc, step=iteration)
@@ -249,7 +250,7 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument("-d", "--dataset", default='omniglot', choices=['omniglot', 'miniimagenet'])
     ap.add_argument("-t", "--type", default='test', choices=['train', 'test'])
-    ap.add_argument("-n_way", "--n_way", default='20')  # classes used for classification
+    ap.add_argument("-n_way", "--n_way", default='5')  # classes used for classification
     ap.add_argument("-shot_num", "--shot_num", default='5')  # example per class of support set
     ap.add_argument("-query_num", "--query_num", default='5')  # query images
     ap.add_argument("-update_steps_train", default="1")
@@ -265,17 +266,9 @@ if __name__ == '__main__':
     # -d omniglot -t train -n_way 5 -shot_num 5 -query_num 5 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
     # -d omniglot -t test -n_way 5 -shot_num 5 -query_num 5 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
 
-    #                       --------------caso 20way 5shot omniglot-----------------------
-    # -d omniglot -t train -n_way 20 -shot_num 5 -query_num 5 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-    # -d omniglot -t test -n_way 20 -shot_num 5 -query_num 5 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-
     #                       ---------------caso 5way 1shot omniglot-------------------
     # -d omniglot -t train -n_way 5 -shot_num 1 -query_num 1 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
     # -d omniglot -t test -n_way 5 -shot_num 1 -query_num 1 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
-
-    #                       --------------caso 20way 1shot omniglot-----------------------
-    # -d omniglot -t train -n_way 20 -shot_num 1 -query_num 1 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-    # -d omniglot -t test -n_way 20 -shot_num 1 -query_num 1 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
 
     #                       -----------------caso 5way 1shot miniimagenet-------------------
     #
@@ -314,8 +307,9 @@ if __name__ == '__main__':
     maml = MAML(model_name=model, out_size=out_size)
     try:
         if type == "train":
-            log_dir = 'logs_' + str(dataset) + '/'+ str(n_way) + 'way_' + str(shot_num) + 'shot_' + str(model_name) + '_firstOrderApprox_' + str(
-                                       datetime.datetime.now().strftime("%Y%m%d-%H%M%S")) + '/'
+            log_dir = 'logs_' + str(dataset) + '/' + str(n_way) + 'way_' + str(shot_num) + 'shot_' + str(
+                model_name) + '_firstOrderApprox_' + str(
+                datetime.datetime.now().strftime("%Y%m%d-%H%M%S")) + '/'
             print(' train maml model with: ' + str(n_way) + 'way-' + str(shot_num) + 'shot')
 
             if not os.path.isdir(folder_name):
@@ -335,8 +329,6 @@ if __name__ == '__main__':
     if type == "test":
         n_interations_test = 600
         print('test maml model with: ' + str(n_way) + 'way-' + str(shot_num) + 'shot')
-        # maml.model = tf.keras.models.load_model('/home/giovanna/PycharmProjects/MAML/classification/models_miniimagenet_total/maml_5way_5shot_MiniimagenetConvModel_firstOrderApprox_20210519-115017/best_model_loss')
 
-        # maml.model.load_weights(folder_name+'/_model_59001.ckpt-1')
-        maml.model = tf.keras.models.load_model(folder_name +'/best_model_loss')
+        maml.model = tf.keras.models.load_model(folder_name + '/best_model_loss')
         maml.test(lr_inner, update_steps_test, batch_generator, n_interations_test)
