@@ -39,34 +39,26 @@ The MAML algorithm has been implemented
 - Classification folder:  
    1. Run the script _maml.py_ from the command line:
      ```sh
-        python maml.py -d <dataset (omniglot or miniimagenet)> -t <type (test or train)> -n_way <number of classes used for classification> -shot_num <> -query_num <> -update_steps_train <> -update_steps_test <> -lr <learning rate> -meta_batch_size <> -model_name <choices: 'MiniimagenetConvModel', 'OmniglotConvModel', 'OmniglotNoConvModel'> -iteration_train <default 60000>
+        python maml.py -d <dataset (omniglot or miniimagenet)> -t <type (test or train)> -n_way <number of classes used for classification> -shot_num <> -query_num <> -update_steps_train <> -update_steps_test <> -lr <learning rate> -meta_batch_size <> -model_name <choices: 'MiniimagenetConvModel', 'OmniglotConvModel'> -iteration_train <default 60000>
 
     ```
 
   Some of the cases reproduced are:    
-  python maml.py + (one of the six cases and choose whether to train or test )
+  python maml.py + (one of the four cases and choose whether to train or test )
     ```sh
      1. 5way 5shot omniglot
      -d omniglot -t train -n_way 5 -shot_num 5 -query_num 5 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
      -d omniglot -t test -n_way 5 -shot_num 5 -query_num 5 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
 
-     2. 20way 5shot omniglot
-     -d omniglot -t train -n_way 20 -shot_num 5 -query_num 5 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-     -d omniglot -t test -n_way 20 -shot_num 5 -query_num 5 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-
-     3. 5way 1shot omniglot
+     2. 5way 1shot omniglot
      -d omniglot -t train -n_way 5 -shot_num 1 -query_num 1 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
      -d omniglot -t test -n_way 5 -shot_num 1 -query_num 1 -update_steps_train 1 -update_steps_test 3 -lr 0.4 -meta_batch_size 32 -model_name OmniglotConvModel
 
-     4. 20way 1shot omniglot
-     -d omniglot -t train -n_way 20 -shot_num 1 -query_num 1 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-     -d omniglot -t test -n_way 20 -shot_num 1 -query_num 1 -update_steps_train 5 -update_steps_test 5 -lr 0.1 -meta_batch_size 16 -model_name OmniglotConvModel
-
-     5. 5way 1shot miniimagenet
+     3. 5way 1shot miniimagenet
      -d miniimagenet -t train -n_way 5 -shot_num 1 -query_num 15 -update_steps_train 5 -update_steps_test 10 -lr 0.01 -meta_batch_size 4 -model_name MiniimagenetConvModel
      -d miniimagenet -t test -n_way 5 -shot_num 1 -query_num 15 -update_steps_train 5 -update_steps_test 10 -lr 0.01 -meta_batch_size 4 -model_name MiniimagenetConvModel
 
-     6. 5way 5shot miniimagenet
+     4. 5way 5shot miniimagenet
      -d miniimagenet -t train -n_way 5 -shot_num 5 -query_num 15 -update_steps_train 5 -update_steps_test 10 -lr 0.01 -meta_batch_size 2 -model_name MiniimagenetConvModel
      -d miniimagenet -t test -n_way 5 -shot_num 5 -query_num 15 -update_steps_train 5 -update_steps_test 10 -lr 0.01 -meta_batch_size 2 -model_name MiniimagenetConvModel
   ```
