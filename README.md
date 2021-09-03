@@ -74,4 +74,4 @@ The MAML algorithm has been implemented
      ```sh
         python maml_firstOrderApprox.py +  (choose one of the four cases above and choose whether to perform train or test)
 
-            ```
+     ```
