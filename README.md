@@ -35,7 +35,7 @@ The MAML algorithm has been implemented
     - dataset: contains Miniimagenet and Omniglot datasets
     - models_miniimagenet and models_omniglot: contain the optimal models
     - maml.py: MAML algorithm
-    - maml_firstOrderApprox.py: MAML with first order approximation
+    - maml_firstOrderApprox.py: MAML algorithm with first order approximation
     - model.py: contains models to train
     - taskGenerator.py: generate tasks and batches of tasks from datasets
 
@@ -69,3 +69,8 @@ The MAML algorithm has been implemented
              -d miniimagenet -t train -n_way 5 -shot_num 5 -query_num 15 -update_steps_train 5 -update_steps_test 10 -lr 0.01 -meta_batch_size 2 -model_name MiniimagenetConvModel
              -d miniimagenet -t test -n_way 5 -shot_num 5 -query_num 15 -update_steps_train 5 -update_steps_test 10 -lr 0.01 -meta_batch_size 2 -model_name MiniimagenetConvModel
   ```
+
+   2. Run the scrips _maml_firstOrderApprox.py_ for the command line:
+     ```sh
+        python maml_firstOrderApprox.py +  (choose one of the four cases above and choose whether to perform train or test)
+      ```
